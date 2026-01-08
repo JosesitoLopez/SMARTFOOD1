@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Problemas Alimenticios</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") center/cover no-repeat;
+    font-family:Arial;
+}
+
+/* CAPA OSCURA */
+.overlay{
+    min-height:100vh;
+    background:rgba(0,0,0,.65);
+    padding:30px 20px;
+}
+
+/* CONTENEDOR */
+.contenedor{
+    max-width:1100px;
+    margin:auto;
+}
+
+h2{
+    color:white;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+p{
+    color:#eee;
+    text-align:center;
+    margin-bottom:30px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:20px;
+}
+
+/* TARJETA */
+.card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+    transition:.3s;
+    animation:aparecer .4s ease;
+}
+
+.card:hover{
+    transform:scale(1.05);
+}
+
+.card img{
+    width:100%;
+    height:150px;
+    object-fit:cover;
+}
+
+.card .info{
+    padding:15px;
+}
+
+.card h3{
+    margin:0 0 8px;
+    font-size:16px;
+}
+
+.card span{
+    font-size:13px;
+    color:#555;
+}
+
+.tipo{
+    display:inline-block;
+    margin-top:10px;
+    font-size:12px;
+    padding:4px 10px;
+    border-radius:12px;
+    background:#1a73e8;
+    color:white;
+}
+
+@keyframes aparecer{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+<div class="contenedor">
+
+<h2>Problemas Alimenticios</h2>
+<p>Información confiable para conocer, prevenir y actuar</p>
+
+<div class="grid">
+
+    <!-- INFOGRAFÍA -->
+    <div class="card" onclick="abrir('https://www.who.int/es/news-room/fact-sheets/detail/obesity-and-overweight')">
+        <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443">
+        <div class="info">
+            <h3>Obesidad y sobrepeso</h3>
+            <span>Qué son, causas, riesgos y prevención.</span><br>
+            <div class="tipo">Infografía</div>
+        </div>
+    </div>
+
+    <!-- TRÍPTICO -->
+    <div class="card" onclick="abrir('https://www.gob.mx/salud/documentos/trastornos-de-la-conducta-alimentaria')">
+        <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352">
+        <div class="info">
+            <h3>Trastornos de la conducta alimentaria</h3>
+            <span>Anorexia, bulimia y señales de alerta.</span><br>
+            <div class="tipo">Tríptico</div>
+        </div>
+    </div>
+
+    <!-- ARTÍCULO -->
+    <div class="card" onclick="abrir('https://www.unicef.org/mexico/alimentaci%C3%B3n-saludable')">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c">
+        <div class="info">
+            <h3>Alimentación saludable</h3>
+            <span>Recomendaciones para jóvenes y adultos.</span><br>
+            <div class="tipo">Artículo</div>
+        </div>
+    </div>
+
+    <!-- INFOGRAFÍA -->
+    <div class="card" onclick="abrir('https://www.who.int/es/news-room/fact-sheets/detail/malnutrition')">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+        <div class="info">
+            <h3>Desnutrición</h3>
+            <span>Tipos, consecuencias y tratamiento.</span><br>
+            <div class="tipo">Infografía</div>
+        </div>
+    </div>
+
+    <!-- ARTÍCULO -->
+    <div class="card" onclick="abrir('https://medlineplus.gov/spanish/eatingdisorders.html')">
+        <img src="https://images.unsplash.com/photo-1516684669134-de6cec1a66a3">
+        <div class="info">
+            <h3>Problemas alimenticios comunes</h3>
+            <span>Información médica confiable.</span><br>
+            <div class="tipo">Artículo</div>
+        </div>
+    </div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+function abrir(url){
+    window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>

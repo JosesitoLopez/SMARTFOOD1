@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Comentarios</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1504674900247-0877df9cc836") center/cover no-repeat;
+    font-family:Arial;
+}
+
+.overlay{
+    min-height:100vh;
+    background:rgba(0,0,0,.65);
+    display:flex;
+    justify-content:center;
+    padding:40px 15px;
+}
+
+.contenedor{
+    background:white;
+    max-width:700px;
+    width:100%;
+    padding:30px;
+    border-radius:30px;
+    box-shadow:0 25px 60px rgba(0,0,0,.5);
+    animation:entrada .6s ease;
+}
+
+@keyframes entrada{
+    from{opacity:0;transform:translateY(40px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+h2{text-align:center;margin-top:0;}
+
+.promedio{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+/* ESTRELLAS */
+.estrellas{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    font-size:34px;
+    margin:15px 0 25px;
+}
+
+.estrellas span{
+    cursor:pointer;
+    color:#ccc;
+    transition:.3s;
+}
+
+.estrellas span:hover{
+    transform:scale(1.4) rotate(10deg);
+    color:#fbc02d;
+}
+
+.estrellas .activa{
+    color:#fbc02d;
+    animation:rebote .3s;
+}
+
+@keyframes rebote{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.4);}
+    100%{transform:scale(1);}
+}
+
+/* TEXTO */
+textarea{
+    width:100%;
+    height:95px;
+    padding:14px;
+    border-radius:18px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+/* BOTÓN */
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:30px;
+    background:#1a73e8;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:15px;
+    transition:.3s;
+}
+
+button:hover{
+    background:#1558b0;
+    transform:translateY(-2px);
+}
+
+/* LISTA */
+.lista{
+    margin-top:30px;
+}
+
+.contador{
+    text-align:center;
+    font-size:14px;
+    color:#555;
+    margin-bottom:10px;
+}
+
+/* COMENTARIO */
+.comentario{
+    background:#f9f9f9;
+    padding:16px;
+    border-radius:22px;
+    margin-bottom:15px;
+    animation:aparecer .4s ease;
+    transition:.3s;
+}
+
+.comentario:hover{
+    transform:scale(1.02);
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+@keyframes aparecer{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.rating{
+    color:#fbc02d;
+    margin-bottom:6px;
+}
+
+/* REACCIONES */
+.reacciones{
+    display:flex;
+    gap:25px;
+    margin-top:10px;
+    font-size:15px;
+}
+
+.reacciones span{
+    cursor:pointer;
+    transition:.2s;
+}
+
+.reacciones span:hover{
+    transform:scale(1.3);
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+<div class="contenedor">
+
+    <h2>¿Qué te pareció nuestra aplicación web?</h2>
+
+    <div class="promedio" id="promedio">⭐ Promedio: 0</div>
+
+    <div class="estrellas">
+        <span onclick="calificar(1)">★</span>
+        <span onclick="calificar(2)">★</span>
+        <span onclick="calificar(3)">★</span>
+        <span onclick="calificar(4)">★</span>
+        <span onclick="calificar(5)">★</span>
+    </div>
+
+    <textarea id="texto" placeholder="Escribe tu comentario (anónimo)"></textarea>
+
+    <button onclick="guardar()">Enviar comentario</button>
+
+    <div class="lista">
+        <div class="contador" id="contador"></div>
+        <div id="comentarios"></div>
+    </div>
+
+</div>
+</div>
+
+<script>
+let rating = 0;
+const estrellas = document.querySelectorAll(".estrellas span");
+const lista = document.getElementById("comentarios");
+const contador = document.getElementById("contador");
+const promedioDiv = document.getElementById("promedio");
+
+let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+
+/* CALIFICAR */
+function calificar(n){
+    rating = n;
+    estrellas.forEach((e,i)=>{
+        e.classList.toggle("activa", i < n);
+    });
+}
+
+/* GUARDAR */
+function guardar(){
+    const texto = document.getElementById("texto").value.trim();
+    if(texto === "" || rating === 0){
+        alert("Completa comentario y estrellas ⭐");
+        return;
+    }
+
+    comentarios.unshift({
+        texto,
+        rating,
+        likes:0,
+        dislikes:0
+    });
+
+    localStorage.setItem("comentarios", JSON.stringify(comentarios));
+    document.getElementById("texto").value = "";
+    rating = 0;
+    estrellas.forEach(e=>e.classList.remove("activa"));
+
+    render();
+}
+
+/* MOSTRAR */
+function render(){
+    lista.innerHTML = "";
+    contador.textContent = `💬 ${comentarios.length} comentarios`;
+
+    let suma = 0;
+
+    comentarios.forEach((c,i)=>{
+        suma += c.rating;
+        lista.innerHTML += `
+        <div class="comentario">
+            <div class="rating">${"★".repeat(c.rating)}</div>
+            <div>${c.texto}</div>
+            <div class="reacciones">
+                <span onclick="like(${i})">👍 ${c.likes}</span>
+                <span onclick="dislike(${i})">👎 ${c.dislikes}</span>
+            </div>
+        </div>`;
+    });
+
+    promedioDiv.textContent =
+        `⭐ Promedio: ${(suma / (comentarios.length || 1)).toFixed(1)}`;
+}
+
+/* REACCIONES */
+function like(i){comentarios[i].likes++; actualizar();}
+function dislike(i){comentarios[i].dislikes++; actualizar();}
+
+function actualizar(){
+    localStorage.setItem("comentarios", JSON.stringify(comentarios));
+    render();
+}
+
+/* INICIAL */
+render();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Pago en efectivo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") center/cover no-repeat;
+    font-family:Arial;
+}
+
+.overlay{
+    min-height:100vh;
+    background:rgba(0,0,0,.65);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.contenedor{
+    background:white;
+    max-width:420px;
+    width:100%;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 25px 50px rgba(0,0,0,.5);
+    animation:entrada .6s ease;
+}
+
+@keyframes entrada{
+    from{opacity:0;transform:translateY(40px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.mensaje{
+    font-size:20px;
+    font-weight:bold;
+    color:#2e7d32;
+    margin-top:10px;
+}
+
+.total{
+    font-size:32px;
+    font-weight:bold;
+    color:#2e7d32;
+    margin:15px 0;
+}
+
+.botones{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:25px;
+}
+
+.botones button{
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.volver{background:#2e7d32;color:white;}
+.comentarios{background:#f9a825;color:white;}
+.saber{background:#1a73e8;color:white;}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+    <div class="contenedor">
+
+        <h2>PAGO EN EFECTIVO</h2>
+
+        <div class="mensaje">
+            PERFECTO!!! TE COBRARÁN
+        </div>
+
+        <div class="total">
+            $<span id="total"></span> PESOS
+        </div>
+
+        <p>El pago se realizará directamente en la cafetería</p>
+
+        <!-- BOTONES -->
+        <div class="botones">
+            <button class="volver" onclick="volverAPedir()">
+                Volver a pedir
+            </button>
+
+            <button class="comentarios" onclick="comentarios()">
+                Dejar comentarios
+            </button>
+
+            <button class="saber" onclick="saberMas()">
+                Saber más sobre problemas alimenticios
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* OBTENER TOTAL */
+const total = localStorage.getItem("totalPago") || 0;
+document.getElementById("total").textContent = total;
+
+/* REDIRECCIONES */
+function volverAPedir(){
+    window.location.href = "MENU DE PRODUCTOS.html";
+}
+
+function comentarios(){
+    window.location.href = "COMENTARIOS.html";
+}
+
+function saberMas(){
+    window.location.href = "PROBLEMAS_ALIMENTICIOS.html";
+}
+</script>
+
+</body>
+</html>

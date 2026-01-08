@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Administrador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1504674900247-0877df9cc836") center/cover no-repeat;
+    font-family:Arial;
+}
+
+.overlay{
+    min-height:100vh;
+    background:rgba(0,0,0,.65);
+    padding:20px;
+}
+
+.contenedor{
+    max-width:1200px;
+    margin:auto;
+}
+
+h2{
+    color:white;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.btn-agregar{
+    width:100%;
+    padding:12px;
+    background:#2e7d32;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+/* FORMULARIO */
+form{
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:20px;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .4s ease;
+}
+form.activo{max-height:500px;}
+
+input,button{
+    width:100%;
+    padding:8px;
+    margin-top:8px;
+}
+
+/* CATÁLOGO */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+    gap:15px;
+}
+
+/* TARJETA */
+.item{
+    background:white;
+    border-radius:15px;
+    padding:10px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+.item img{
+    width:100%;
+    height:100px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.item b{
+    display:block;
+    margin-top:6px;
+    font-size:14px;
+}
+
+.info{
+    font-size:13px;
+    margin-top:3px;
+    color:#333;
+}
+
+.botones{
+    display:flex;
+    justify-content:space-between;
+    margin-top:8px;
+}
+
+.botones button{
+    font-size:11px;
+    padding:5px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+<div class="contenedor">
+
+<h2>Administrador de productos</h2>
+
+<button class="btn-agregar" onclick="toggleForm()">➕ Agregar producto</button>
+
+<form id="formulario" onsubmit="agregarProducto(event)">
+    <input id="nombre" placeholder="Nombre del producto" required>
+    <input id="calorias" type="number" placeholder="Calorías (máx 600)" required>
+    <input id="precio" type="number" placeholder="Precio ($ MXN)" required>
+    <input id="imagen" type="file" accept="image/*" required>
+    <button>Guardar producto</button>
+</form>
+
+<div class="grid" id="lista"></div>
+
+</div>
+</div>
+
+<script>
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+const lista = document.getElementById("lista");
+const form = document.getElementById("formulario");
+
+function toggleForm(){
+    form.classList.toggle("activo");
+}
+
+function guardar(){
+    localStorage.setItem("productos", JSON.stringify(productos));
+    mostrar();
+}
+
+function agregarProducto(e){
+    e.preventDefault();
+
+    const nombreVal = nombre.value.trim();
+    const caloriasVal = calorias.value;
+    const precioVal = precio.value;
+
+    if(nombreVal === ""){
+        alert("Falta el nombre");
+        return;
+    }
+
+    if(caloriasVal <= 0 || caloriasVal > 600){
+        alert("Calorías inválidas");
+        return;
+    }
+
+    if(precioVal <= 0){
+        alert("Precio inválido");
+        return;
+    }
+
+    if(imagen.files.length === 0){
+        alert("Selecciona una imagen");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(){
+        productos.push({
+            nombre: nombreVal,
+            calorias: caloriasVal,   // SE GUARDA EXACTO
+            precio: precioVal,       // SE GUARDA EXACTO
+            imagen: reader.result,
+            activo: true
+        });
+        guardar();
+    };
+    reader.readAsDataURL(imagen.files[0]);
+
+    form.reset();
+    form.classList.remove("activo");
+}
+
+function suspender(i){
+    productos[i].activo = false;
+    guardar();
+}
+
+function activar(i){
+    productos[i].activo = true;
+    guardar();
+}
+
+function eliminar(i){
+    if(confirm("¿Eliminar producto?")){
+        productos.splice(i,1);
+        guardar();
+    }
+}
+
+function mostrar(){
+    lista.innerHTML = "";
+    productos.forEach((p,i)=>{
+        lista.innerHTML += `
+        <div class="item">
+            <img src="${p.imagen}">
+            <b>${p.nombre}</b>
+            <div class="info">🔥 ${p.calorias} kcal</div>
+            <div class="info">💲 $${p.precio} MXN</div>
+            <div class="info">Estado: ${p.activo ? "Activo" : "Suspendido"}</div>
+
+            <div class="botones">
+                ${p.activo
+                    ? `<button onclick="suspender(${i})">Suspender</button>`
+                    : `<button onclick="activar(${i})">Activar</button>`
+                }
+                <button onclick="eliminar(${i})">Eliminar</button>
+            </div>
+        </div>`;
+    });
+}
+
+mostrar();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Pago</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") center/cover no-repeat;
+    font-family:Arial;
+}
+
+.overlay{
+    min-height:100vh;
+    background:rgba(0,0,0,.65);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.contenedor{
+    background:white;
+    max-width:420px;
+    width:100%;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 25px 50px rgba(0,0,0,.5);
+}
+
+.total{
+    font-size:28px;
+    font-weight:bold;
+    color:#2e7d32;
+    margin:20px 0;
+}
+
+.botones{
+    display:flex;
+    gap:15px;
+}
+
+.botones button{
+    flex:1;
+    padding:15px;
+    border:none;
+    border-radius:30px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.efectivo{background:#2e7d32;color:white;}
+.tarjeta{background:#1a73e8;color:white;}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+    <div class="contenedor">
+        <h2>TU COBRO SERÁ DE:</h2>
+        <div class="total" id="total">$0 MXN</div>
+
+        <p>¿CÓMO GUSTARÍAS PAGAR EL MONTO?</p>
+
+        <div class="botones">
+            <button class="efectivo" onclick="pagoEfectivo()">EFECTIVO</button>
+            <button class="tarjeta" onclick="pagoTarjeta()">TARJETA</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+let total = 0;
+
+carrito.forEach(p=>{
+    total += Number(p.precio) * Number(p.cantidad);
+});
+
+document.getElementById("total").textContent = `$${total} MXN`;
+
+/* EFECTIVO → REDIRIGE */
+function pagoEfectivo(){
+    localStorage.setItem("totalPago", total);
+    window.location.href = "PAGO EFECTIVO.html";
+}
+
+/* TARJETA */
+function pagoTarjeta(){
+    window.location.href = "PAGO TARJETA.html";
+}
+</script>
+
+</body>
+</html>

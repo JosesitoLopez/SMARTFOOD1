@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Registro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,300;1,400;1,600&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") center/cover no-repeat;
+    font-family:'Poppins',sans-serif;
+    font-style:italic;
+}
+
+.fondo{
+    min-height:100vh;
+    background:rgba(0,0,0,.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.contenedor{
+    background:white;
+    max-width:420px;
+    width:100%;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 20px 45px rgba(0,0,0,.4);
+    animation:entrar .8s ease;
+}
+
+@keyframes entrar{
+    from{opacity:0;transform:translateY(40px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+h2,p{text-align:center;}
+
+.campo{margin-bottom:15px;}
+
+.campo input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:25px;
+    background:#28e15d;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.link{
+    margin-top:15px;
+    text-align:center;
+    font-size:14px;
+}
+
+.link a{
+    color:#1a73e8;
+    text-decoration:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
+
+<script>
+function validarAcceso(){
+    const password = document.getElementById("password").value;
+
+    if(
+        password === "SMARTFOODMAT10:20" ||
+        password === "SMARTFOODVESP4:30"
+    ){
+        // 👉 AQUÍ COLOCAS EL ARCHIVO AL QUE QUIERES ENTRAR
+        window.location.href = "ADMIN AGREGA.html";
+    }else{
+        alert("Contraseña incorrecta. Acceso denegado.");
+    }
+}
+</script>
+
+</head>
+
+<body>
+<div class="fondo">
+    <div class="contenedor">
+        <h2>Registro</h2>
+        <p>INICIA TU SESIÓN SMARTFOOD</p>
+
+        <div class="campo">
+            <input type="text" placeholder="CECYTEMCHIMALHUACANI">
+        </div>
+
+        <div class="campo">
+            <input type="password" id="password" placeholder="Contraseña">
+        </div>
+
+        <button onclick="validarAcceso()">
+            INICIAR SESIÓN
+        </button>
+    </div>
+</div>
+</body>
+</html>

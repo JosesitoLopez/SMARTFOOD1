@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Smartfood | Menú</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:url("https://images.unsplash.com/photo-1504674900247-0877df9cc836") center/cover no-repeat;
+    font-family:Arial;
+}
+
+/* CAPA OSCURA */
+.overlay{
+    min-height:100vh;
+    background:rgba(0,0,0,.6);
+    padding:20px;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+h2{
+    color:white;
+    margin:0;
+}
+
+/* CARRITO */
+.carrito{
+    background:white;
+    padding:10px 15px;
+    border-radius:25px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:bold;
+    box-shadow:0 5px 15px rgba(0,0,0,.4);
+    cursor:pointer;
+}
+
+.carrito img{
+    width:25px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:15px;
+}
+
+/* TARJETA */
+.item{
+    background:white;
+    border-radius:15px;
+    padding:12px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+.item img{
+    width:100%;
+    height:110px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.item b{
+    display:block;
+    margin-top:6px;
+}
+
+.item span{
+    font-size:13px;
+    color:#555;
+}
+
+/* CONTADOR */
+.contador{
+    margin-top:6px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* BOTONES */
+.botones{
+    display:flex;
+    gap:5px;
+    margin-top:10px;
+}
+
+.botones button{
+    flex:1;
+    padding:6px;
+    border:none;
+    border-radius:15px;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.agregar{
+    background:#2e7d32;
+    color:white;
+}
+
+.eliminar{
+    background:#c62828;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <div class="header">
+        <h2>Menú de productos</h2>
+
+        <!-- CLICK AL CARRITO -->
+        <div class="carrito" onclick="irPago()">
+            <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png">
+            $<span id="total">0</span> MXN
+        </div>
+    </div>
+
+    <div class="grid" id="menu"></div>
+
+</div>
+
+<script>
+const menu = document.getElementById("menu");
+const totalSpan = document.getElementById("total");
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+let total = 0;
+
+/* INICIALIZAR CONTADORES */
+productos.forEach(p=>{
+    if(p.cantidad === undefined){
+        p.cantidad = 0;
+    }
+});
+
+/* MOSTRAR PRODUCTOS */
+function mostrarMenu(){
+    menu.innerHTML = "";
+
+    productos.forEach((p,i)=>{
+        if(p.activo){
+            menu.innerHTML += `
+            <div class="item">
+                <img src="${p.imagen}">
+                <b>${p.nombre}</b>
+                <span>${p.calorias} kcal</span><br>
+                <span>$${p.precio} MXN</span>
+
+                <div class="contador">
+                    Agregado: ${p.cantidad} veces
+                </div>
+
+                <div class="botones">
+                    <button class="agregar" onclick="agregarCarrito(${i})">
+                        Agregar
+                    </button>
+                    <button class="eliminar" onclick="eliminarCarrito(${i})">
+                        Eliminar
+                    </button>
+                </div>
+            </div>`;
+        }
+    });
+}
+
+/* AGREGAR AL CARRITO */
+function agregarCarrito(i){
+    productos[i].cantidad++;
+    total += Number(productos[i].precio);
+
+    actualizarCarrito();
+}
+
+/* ELIMINAR DEL CARRITO */
+function eliminarCarrito(i){
+    if(productos[i].cantidad > 0){
+        productos[i].cantidad--;
+        total -= Number(productos[i].precio);
+
+        actualizarCarrito();
+    }
+}
+
+/* ACTUALIZAR CARRITO */
+function actualizarCarrito(){
+    totalSpan.textContent = total;
+
+    carrito = productos
+        .filter(p => p.cantidad > 0)
+        .map(p => ({
+            nombre: p.nombre,
+            precio: p.precio,
+            calorias: p.calorias,
+            imagen: p.imagen,
+            cantidad: p.cantidad
+        }));
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    mostrarMenu();
+}
+
+/* IR A PAGO */
+function irPago(){
+    window.location.href = "PAGO.html";
+}
+
+/* INICIAL */
+mostrarMenu();
+</script>
+
+</body>
+</html>
